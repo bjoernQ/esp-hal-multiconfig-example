@@ -1,0 +1,23 @@
+[alias]
+run-esp32c6 = "run --release --target riscv32imac-unknown-none-elf --config=./.cargo/config_esp32c6.toml --features=esp32c6"
+run-esp32 = "run --release --target xtensa-esp32-none-elf --config=./.cargo/config_esp32.toml --features=esp32"
+run-esp32-psram = "run --release --target xtensa-esp32-none-elf --config=./.cargo/config_esp32.toml --features=esp32-psram"
+
+[target.'cfg(target_arch = "riscv32")']
+runner = "espflash flash --monitor"
+rustflags = [
+  # Required to obtain backtraces (e.g. when using the "esp-backtrace" crate.)
+  # NOTE: May negatively impact performance of produced code
+  "-C", "force-frame-pointers",
+]
+
+[target.'cfg(target_arch = "xtensa")']
+runner = "espflash flash --monitor"
+rustflags = [
+   "-C", "link-arg=-nostartfiles",
+]
+
+# to avoid confusion don't place [env] here - only have them in the individual `config_XXX.toml` files
+
+[unstable]
+build-std = ["core", "alloc"]

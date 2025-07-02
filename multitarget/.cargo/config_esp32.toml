@@ -1,0 +1,6 @@
+[env]
+# this is purely to help tooling know which chip this config is for
+ESP_CONFIG_CHIP="esp32"
+
+ESP_LOG="debug"
+ESP_BACKTRACE_CONFIG_BACKTRACE_FRAMES = "20"

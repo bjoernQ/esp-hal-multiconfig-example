@@ -1,0 +1,4 @@
+[env]
+# No need to hint the chip to the tooling via ESP_CONFIG_CHIP - it will figure it out from Cargo.toml
+
+ESP_LOG="debug"

@@ -1,0 +1,12 @@
+// copy this as `.vscode.settings` for the target/config you want to edit
+{
+    "rust-analyzer.cargo.target": "xtensa-esp32-none-elf",
+    "rust-analyzer.cargo.features": [
+        "esp32"
+    ],
+    "rust-analyzer.cargo.extraArgs": ["--config=./.cargo/config_esp32.toml"],
+    "rust-analyzer.cargo.buildScripts.useRustcWrapper": true,
+    "rust-analyzer.cargo.allTargets": false,
+    "rust-analyzer.check.allTargets": false,
+    "rust-analyzer.showUnlinkedFileNotification": false,
+}

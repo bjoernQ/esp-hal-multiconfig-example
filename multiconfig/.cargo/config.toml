@@ -1,0 +1,20 @@
+[alias]
+run-config-a = "run --config=./.cargo/config_a.toml --release"
+run-config-b = "run --config=./.cargo/config_b.toml --release"
+
+[target.riscv32imac-unknown-none-elf]
+runner = "espflash flash --monitor --chip esp32c6"
+
+# to avoid confusion don't place [env] here - only have them in the individual `config_XXX.toml` files
+
+[build]
+rustflags = [
+  # Required to obtain backtraces (e.g. when using the "esp-backtrace" crate.)
+  # NOTE: May negatively impact performance of produced code
+  "-C", "force-frame-pointers",
+]
+
+target = "riscv32imac-unknown-none-elf"
+
+[unstable]
+build-std = ["alloc", "core"]

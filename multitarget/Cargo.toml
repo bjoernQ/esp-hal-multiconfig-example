@@ -1,0 +1,63 @@
+[package]
+edition = "2021"
+name    = "multitarget"
+version = "0.1.0"
+
+[[bin]]
+name = "multitarget"
+path = "./src/bin/main.rs"
+
+[dependencies]
+esp-bootloader-esp-idf = "0.1.0"
+esp-hal = { version = "=1.0.0-beta.1", features = [
+  "log-04",
+  "unstable",
+] }
+log = "0.4.27"
+
+critical-section = "1.2.0"
+embassy-executor = { version = "0.7.0", features = [
+  "log",
+  "task-arena-size-20480",
+] }
+embassy-time = { version = "0.4.0", features = ["log"] }
+esp-backtrace = { version = "0.16.0", features = [
+  "exception-handler",
+  "panic-handler",
+  "println",
+] }
+esp-hal-embassy = { version = "0.8.1", features = ["log-04"] }
+esp-println = { version = "0.14.0", features = ["log-04"] }
+
+esp-alloc = { version = "0.8.0" }
+
+static_cell = { version = "2.1.0" }
+
+[features]
+# Select the correct target chip feature for the relevant dependencies.
+esp32c6     = ["esp-hal/esp32c6", "esp-backtrace/esp32c6", "esp-println/esp32c6", "esp-hal-embassy/esp32c6"]
+esp32       = ["esp-hal/esp32", "esp-backtrace/esp32", "esp-println/esp32", "esp-hal-embassy/esp32"]
+# Note: We can even enable different features per configuration
+esp32-psram = ["esp-hal/esp32", "esp-hal/psram", "esp-backtrace/esp32", "esp-println/esp32", "esp-hal-embassy/esp32"]
+
+[profile.dev]
+# Rust debug is too slow.
+# For debug builds always builds with some optimization
+opt-level = "s"
+
+[profile.release]
+codegen-units    = 1     # LLVM can perform better optimizations using a single thread
+debug            = 2
+debug-assertions = false
+incremental      = false
+lto              = 'fat'
+opt-level        = 's'
+overflow-checks  = false
+
+# We only patch the crates to make this work with the not yet release esp-config TUI
+[patch.crates-io]
+esp-hal = { git = "https://github.com/esp-rs/esp-hal.git" }
+esp-backtrace = { git = "https://github.com/esp-rs/esp-hal.git" }
+esp-println = { git = "https://github.com/esp-rs/esp-hal.git" }
+esp-hal-embassy = { git = "https://github.com/esp-rs/esp-hal.git" }
+esp-alloc = { git = "https://github.com/esp-rs/esp-hal.git" }
